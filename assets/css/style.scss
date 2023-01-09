@@ -30,7 +30,12 @@ font-family: Helvetica;
 }
 section {
   background: $darkbrown;
-  width: 650px;
-  max-width: 650px;
+  width: auto;
+  max-width: auto;
   padding: 30px 50px 50px 50px;
+}
+
+img {
+  max-width:100%;
+  float: left;
 }
