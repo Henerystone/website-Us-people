@@ -3,6 +3,7 @@
 
 @use 'minima';
 
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
 /* "row style" is flexible size and aligns pictures in center */
 .row {
     align-items: center;
@@ -15,26 +16,31 @@
     padding: 5px;
   }
 
-$lighttan:#fffac5;
-$darkbrown:#271400;
+$light:#ffffff;
+$dark:#353535;
 
 body {
-background: $lighttan;
+background: $light;
 height: 80px;
 display: flex;
 justify-content: space-between;
 padding: 0.5rem calc((100vw - 1200px) / 2);
 z-index: 10;
 position: relative;
-font-family: Helvetica;
+font-family: 'Quicksand';
 }
 section {
-  background: $darkbrown;
+  background: $dark;
   width: 100%;
   padding: 30px 50px 50px 50px;
 }
 
 img {
   max-width:100%;
-  float: left;
+}
+
+.cropped {
+  height:300px; 
+  object-fit:fill;
+  object-position: 50% 50%; 
 }
