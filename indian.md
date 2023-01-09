@@ -31,30 +31,30 @@
     <th class = "indian">5</th>
     <th class = "indian">Pav Bhaji</th>
     <th class = "indian"><img src="/images/pav.jpg" alt="pav bhaji"></th>
-    <th class = "indian">A kind of bread, eaten with a mix of vegetables, </th>
+    <th class = "indian">A kind of bread, eaten with a mix of vegetables and masala</th>
   </tr>
   <tr>
     <th class = "indian">4</th>
     <th class = "indian">Aloo Paratha</th>
     <th class = "indian"><img src="/images/paratha.jpg" alt="aloo paratha"></th>
-    <th class = "indian"></th>
+    <th class = "indian">A kind of flatbread stuffed with mashed potatoes</th>
   </tr>
   <tr>
     <th class = "indian">3</th>
     <th class = "indian">Paneer and Naan</th>
     <th class = "indian"><img src="/images/paneer.jpg" alt="panner and naan"></th>
-    <th class = "indian"></th>
+    <th class = "indian">A kind of Indian flatbread eaten with Indian cottage cheese mixed with spinach</th>
   </tr>
   <tr>
     <th class = "indian">2</th>
     <th class = "indian">Puran Poli</th>
     <th class = "indian"><img src="/images/puran.jpg" alt="puran poli"></th>
-    <th class = "indian"></th>
+    <th class = "indian">Indian Flatbrad filled with sugar and jaggery</th>
   </tr>
   <tr>
     <th class = "indian">1</th>
     <th class = "indian">Pani Puri</th>
     <th class = "indian"><img src="/images/pani.jpg" alt="pani puri"></th>
-    <th class = "indian"></th>
+    <th class = "indian">Round,small and edible bowls filled with chutney and sweet water</th>
   </tr>
 </table>
