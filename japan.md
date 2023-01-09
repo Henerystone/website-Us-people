@@ -31,3 +31,14 @@ Markdown Format takes entire column
     <th>Soba Recipies</th>
     <th><img src="/images/soba.png" alt="Soba" style="height:50%"></th>
   </tr>
+</table>
+
+
+### Recipe Directions
+<table>
+  <th> Essentially the recipe directions are supposed to appear when you click on the images but that's not done yet, so I hope this empty template is okay for now (especially because the plan may change later). The recipe will also have locations where the proportion of food you want can be input (for example, if you want to make 5 batches of soba instead of just 1), which will calculate the recipe's ingredients to fit what the user input.</th>
+    <tr>
+      <th>Recipe Name Here</th>
+      <th>Insert recipe description here</th>
+    </tr>
+</table>
