@@ -43,7 +43,6 @@ Markdown Format takes entire column
 
 ### Recipe Directions
 <table>
-  <th> Essentially the recipe directions are supposed to appear when you click on the images but that's not done yet, so I hope this empty template is okay for now (especially because the plan may change later). The recipe will also have locations where the proportion of food you want can be input (for example, if you want to make 5 batches of soba instead of just 1), which will calculate the recipe's ingredients to fit what the user input. The button for proportions is currently incomplete, so it will not lead to anything.</th>
     <tr>
       <form action="/ramen_recipe.php">
         <label for="fname">How many portions do you want to make?</label>
@@ -53,7 +52,7 @@ Markdown Format takes entire column
     </tr>
     <tr>
       <th>Shoyu Ramen</th>
-      <th>Ingredients</th>
+      <th>Ingredients
             Chicken Dashi (Stock)
               <li>8 c. low-sodium chicken broth
               <li>16 dried shiitake mushrooms
@@ -88,8 +87,8 @@ Markdown Format takes entire column
               <li>1 green onion, white and light green parts only, very thinly sliced
               <li>2 tsp. la-yu
               <li>Nori (optional)
-      <th> Directions </th>
-      <li> Directions
+              </li>
+      <th> Directions
       <li> Stock
         <li> Step 1: In a medium saucepan over medium heat, bring chicken broth to a bare simmer. Remove from heat and let cool 2 minutes. Add in mushrooms and kombu (kelp) and let steep 5 minutes. Then, add in bonito and let steep 5 more minutes. Strain and save solids for nitamago process and serving.
         <li> Step 2: Store dashi chilled, up to 1 week.
