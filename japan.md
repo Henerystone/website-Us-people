@@ -53,12 +53,12 @@ Markdown Format takes entire column
     <tr>
       <th>Shoyu Ramen</th>
       <th>Ingredients
-            Chicken Dashi (Stock)
+            <li>Chicken Dashi (Stock)
               <li>8 c. low-sodium chicken broth
               <li>16 dried shiitake mushrooms
               <li>30 g kombu (kelp)
               <li>20 g dried bonito flakes
-            Tare and Chashu (Marinade and Pork)
+            <li>Tare and Chashu (Marinade and Pork)
               <li>1 1/4 c. low-sodium soy sauce
               <li>1 1/4 c. mirin
               <li>1/2 c. sake
@@ -69,15 +69,15 @@ Markdown Format takes entire column
               <li>3 cloves garlic, peeled and smashed
               <li>3 green onions, halved
               <li>1 lb. pork belly, skin on, cut into 2"-wide strips
-            Nitamago (Marinated Eggs)
+            <li>Nitamago (Marinated Eggs)
               <li>4 cold large eggs
               <li>2 1/2 c. reserved chashu-tare liquid
-            Garlic La-Yu (Chili Oil)
+            <li>Garlic La-Yu (Chili Oil)
               <li>8 cloves garlic, sliced
               <li>1/2 c. canola oil
               <li>1 tbsp. ground chili or 1 1/2 tbsp. crushed red pepper flakes
               <li>2 tsp. sesame seeds
-            Per Serving
+            <li>Per Serving
               <li>4 oz. fresh ramen noodles
               <li>1 1/2 c. chicken dashi
               <li>2 reserved shiitake mushrooms, sliced
