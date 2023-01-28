@@ -13,8 +13,8 @@
 <script>
 function get_food(){
     
-  const url = "http://172.18.185.251:8086/api/jpFood";
-    // const url = "http://localhost:8086/api/jpFood/" (NOT WORKING; needs a fix)
+  // const url = "http://172.18.185.251:8086/api/jpFood";
+  const url = "http://localhost:8086/api/jpFood/" // (NOT WORKING; needs a fix)
 
   // prepare fetch GET options
   const options = {
