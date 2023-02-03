@@ -49,3 +49,8 @@ function get_food(){
 }
 get_food()
 </script>
+
+
+<table>
+  <th></th>
+</table>
