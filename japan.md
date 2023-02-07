@@ -43,13 +43,13 @@ table, td {
         <table id = "createRecipe">
           <tr>
              <th>
-              <label for="ingNum">Number:</label>
+              <label for="ingNum">Number</label>
             </th>
             <th>
-              <label for="ingMeas">Measurement Type:</label>
+              <label for="ingMeas">Measurement Type</label>
             </th>
              <th>
-               <label for="ingName">Ingredient Name:</label>
+               <label for="ingName">Ingredient Name</label>
             </th>
             </tr>
             <tr>
@@ -71,7 +71,7 @@ table, td {
         <button type="button" style = "margin-top: 20px" onclick = "addIngredient()">Add Ingredient</button>
       </div>
       <div class="btn-text-center">
-        <button type="button" style = "margin-top : 10px">Submit Recipe</button>
+        <button type="button" style = "margin-top : 10px" onclick = "submitRec()">Submit Recipe</button>
       </div>
 </div>
 
@@ -142,7 +142,6 @@ function onPortionSubmit(e) {
   
   if (rec != null)  {
     measurements.innerHTML = "Work in Progress, add measurements from backend for " + portions + rec.name;
-
   }
 
 }
@@ -168,6 +167,49 @@ function deleteIng(r) {
   var i = r.parentNode.parentNode.rowIndex;
   document.getElementById("createRecipe").deleteRow(i);
 }
+
+function submitRec(){
+  var table = document.getElementById("createRecipe");
+  var count = table.rows.length - 1;
+  console.log(count);
+  var jpFood = {
+   "Name": "xxxx",
+  "Description": "ddd",
+  "Ingredients": []
+  };
+  for(i=0; i <= 1; i) {
+   var ingredient = {
+    "type": "ddd", 
+    "amount": 11,
+    "unit": "asdsad",
+  };
+   jpFood.push(ingredient);
+  }
+  for(i=1; i <= count; i++) {
+    var row = table.rows[i].getElementsByTagName('td');
+  var tdNum = row[0];
+  var tdMeas = row[1];
+  var tdName = row[2];
+  
+  var inputNum = tdNum.getElementsByTagName('input')[0];
+  var inputMeas = tdMeas.getElementsByTagName('input')[1];
+  var inputName = tdName.getElementsByTagName('input')[2];
+  var ingred = {
+    "type": inputName,
+    "amount": inputNum,
+    "unit": imputMeas,
+  };
+  console.log(input.value) }
+}
+function jons() {
+  [ 
+  {"type":  typecolinput.value
+   "amount":  amountcolinput.value: ,
+   "unit":  unitcolinput.value: ,
+  }
+]
+}
+
 
 get_food()
 </script>
