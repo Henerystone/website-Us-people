@@ -1,12 +1,12 @@
 
 <head>
 <style>
-table, td {
-  border: 1px solid white;
-}
-.btn-text-center{
-	text-align: center;	
-}
+  table, td {
+    border: 1px solid white;
+  }
+  .btn-text-center{
+    text-align: center;	
+  }
 </style>
 </head>
 
@@ -171,20 +171,16 @@ function deleteIng(r) {
 function submitRec(){
   var table = document.getElementById("createRecipe");
   var count = table.rows.length - 1;
+  var name = document.getElementById("recName");
+  var descr = document.getElementById("recDesc");
   console.log(count);
   var jpFood = {
-   "Name": "xxxx",
-  "Description": "ddd",
-  "Ingredients": []
+  Name: "xxxx",
+  Description: "ddd",
+  Ingredients: []
   };
-  for(i=0; i <= 1; i) {
-   var ingredient = {
-    "type": "ddd", 
-    "amount": 11,
-    "unit": "asdsad",
-  };
-   jpFood.push(ingredient);
-  }
+  
+
   for(i=1; i <= count; i++) {
     var row = table.rows[i].getElementsByTagName('td');
   var tdNum = row[0];
@@ -197,19 +193,12 @@ function submitRec(){
   var ingred = {
     "type": inputName,
     "amount": inputNum,
-    "unit": imputMeas,
+    "unit": inputMeas,
   };
-  console.log(input.value) }
+console.log(jpFood)
+jpFood.Ingredients.push(ingred)
 }
-function jons() {
-  [ 
-  {"type":  typecolinput.value
-   "amount":  amountcolinput.value: ,
-   "unit":  unitcolinput.value: ,
-  }
-]
 }
 
-
-get_food()
+get_food();
 </script>
