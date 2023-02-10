@@ -188,6 +188,12 @@ function submitRec(){
   var tdName = row[2];
   
   var inputNum = tdNum.getElementsByTagName('input')[0];
+  inputAmnt = parseInt(inputNum.value);
+
+  if (Number.isInteger(inputAmnt) === false) {
+    alert(inputNum.value + " is not a number, please input a number.");
+    return;
+  }
   var inputMeas = tdMeas.getElementsByTagName('input')[1];
   var inputName = tdName.getElementsByTagName('input')[2];
   var ingred = {
