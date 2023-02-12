@@ -37,7 +37,7 @@
 <div>
   <h1>Japanese Recipies</h1>
   <div style="margin-top:10px;margin-bottom:10px;">
-    <select id="recipiesDropDown" class="recipeNameSelect">recipeNameSelect
+    <select id="recipesDropDown" class="recipeNameSelect">recipeNameSelect
     </select>
   </div>
   <div id="recipeDisplay">
@@ -56,7 +56,7 @@
  
 
 <div id="createrec">
-  <h1>Add/Update/Delete Recipes</h1>
+  <h1>Add, Update, or Delete Recipes</h1>
   
   <div style="margin-top:10px;margin-bottom:20px;">
     <select id="recipeNamesDropDown" class="recipeNameSelect"> </select>
@@ -78,7 +78,8 @@
     </div>
     <div style="margin-top:10px;margin-bottom:10px;">
       <button class = "button" type="button" style="margin-top: 20px;" onclick="addIngredient()">Add Ingredient</button>
-      <button class = "button" type="button" style="margin-top: 10px;" onclick="submitRec()">Submit Recipe</button>
+      <button class = "button" type="button" style="margin-top: 10px;" onclick="submitRec()">Save Recipe</button>
+      <button class = "button" type="button" style="margin-top: 10px;" onclick="deleteRec()">Delete Recipe</button>
     </div>
   </div>
 
@@ -86,6 +87,7 @@
     let rec = null;
     // const url = "http://172.18.185.251:8086/api/jpFood";
     const url = "http://localhost:8086/api/jpFood/"; // (NOT WORKING; needs a fix)
+    selectedRecName = "";
 
     // prepare fetch GET options
     const options = {
@@ -98,42 +100,7 @@
       },
     };
 
-    function get_food() {
-      // prepare HTML search result container for new output
-      //const resultContainer = document.getElementById("foodtable");
-      const recipiesDropDown = document.getElementById("recipiesDropDown");
-      const form = document.getElementById("submitPortions");
-      form.addEventListener("submit", onPortionSubmit);
-      const measurements = document.getElementById("measurements");
-      // const addRecipe = document.getElementById('addRecipe');
 
-      //Async fetch API call to the database to create a new user
-      fetch(url, options).then((response) => {
-        // response contains valid result
-        response.json().then((data) => {
-          console.log("all food ", data);
-           
-          for (let key in data) {
-            console.log(data[key].name);
-          }
-          for (let key in data) {
-            let option = document.createElement("option");
-            option.setAttribute("value", data[key].name);
-            let optionText = document.createTextNode(data[key].name);
-            option.appendChild(optionText);
-            recipiesDropDown.appendChild(option);
-          }
-          recipiesDropDown.addEventListener("change", (e) => {
-            console.log(e.target.value);
-            rec = filterByString(data, e.target.value);
-            const recipeDesc = document.getElementById("recipeDisplay");
-            recipeDesc.innerHTML = rec.directions;
-            console.log("Test ", rec);
-          });
- 
-        });
-      });
-    }
     function onPortionSubmit(e) {
       console.log(e.target.elements.portions.value);
       const portions = e.target.elements.portions.value ?? 1;
@@ -141,8 +108,14 @@
 
       if (rec != null) {
         measurements.innerHTML = "Work in Progress, add measurements from backend for " + portions + rec.name;
+        
       }
     }
+
+
+
+
+
     function filterByString(data, s) {
       return data.filter((e) => e.name.includes(s))[0];
     }
@@ -151,7 +124,7 @@
       initIngredient(0, '', '',  totalIngredientRowIdx++);     
     }
 
-    function initIngredient(amount = 0, meas = "", type = "", rowIdx) {
+    function initIngredient(amount = 0, unit = "", type = "", rowIdx) {
       var table = document.getElementById("createRecipe");
       var row = table.insertRow(rowIdx);
       var cell1 = row.insertCell(0);
@@ -160,8 +133,8 @@
       var cell4 = row.insertCell(3);
       // Do string interpolation for each cell
       cell1.innerHTML = `<input type="text" size="20" name="ingNum[] "value="${amount}">`;
-      cell2.innerHTML = `<input type="text" size="20" name="ingMeas[] "value="${meas}">`;
-      cell3.innerHTML = `<input type="text" size="20" name="ingName[] "value="${type}">`;
+      cell2.innerHTML = `<input type="text" size="20" name="ingName[] "value="${type}">`;
+      cell3.innerHTML = `<input type="text" size="20" name="ingMeas[] "value="${unit}">`;
       cell4.innerHTML = '<button type="button" id="delIng" onclick = "deleteIng(this)">x</button>';
 
       return totalIngredientRowIdx++;
@@ -211,10 +184,28 @@
       } // end for ingred
       saveRec(jpFood);
     }
+    function deleteRec() {
+      rec = { name : selectedRecName };
+      const delete_options = { 
+      ...options, 
+      method: 'POST',
+      body: JSON.stringify(rec) 
+      }; // clones and replaces method
 
-    function getAllRecipes() {
-      const recipiesDropDown = document.getElementById("recipeNamesDropDown");
+      fetch(url + 'delete', delete_options).then((response) => {
+        // response contains valid result
+        response.json().then((data) => {
+          console.log("all food ", data);
+             
+        getAllRecipes(rec.name);
+        });
+      });
+    }
 
+    function getAllRecipes(name=undefined) {
+      const recipesDropDown = document.getElementById("recipeNamesDropDown");
+      document.querySelectorAll('#recipeNamesDropDown option').forEach(option => option.remove())
+      
       //Async fetch API call to the database to create a new user
       fetch(url, options).then((response) => {
         let firstOptionKey = undefined;
@@ -230,13 +221,15 @@
             option.setAttribute("value", data[key].name);
             let optionText = document.createTextNode(data[key].name);
             option.appendChild(optionText);
-            recipiesDropDown.appendChild(option);
+            recipesDropDown.appendChild(option);
           }
           
+          firstOptionKey = name ? name: firstOptionKey;
+          selectedRecName = firstOptionKey;
           rec = filterByString(data, firstOptionKey);
           onRecipeNameChange(rec);
-          recipiesDropDown.addEventListener("change", (e) => {
-            console.log(e.target.value);
+          recipesDropDown.addEventListener("change", (e) => {
+            selectedRecName = e.target.value;
             rec = filterByString(data, e.target.value);
             onRecipeNameChange(rec);
           });
@@ -288,8 +281,9 @@
       if (ingredients) {
         rowIdx = 1;
         for (let ing of ingredients) {
-          initIngredient(ing.amount, ing.measurement, ing.unit, rowIdx++);
+          initIngredient(ing.amount, ing.type, ing.unit, rowIdx++);
         }
+        totalIngredientRowIdx = rowIdx;
       }
     }
     function saveRec(rec) {
@@ -304,11 +298,10 @@
         response.json().then((data) => {
           console.log("all food ", data);
              
- 
+        getAllRecipes(rec.name);
         });
       });
     }
-    get_food();
     getAllRecipes();
   </script>
 </div>
