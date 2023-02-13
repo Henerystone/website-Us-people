@@ -36,24 +36,9 @@
 <!-- Portion UI -->
 <div>
   <h1>Japanese Recipies</h1>
-  <div style="margin-top:10px;margin-bottom:10px;">
-    <select id="recipesDropDown" class="recipeNameSelect">recipeNameSelect
-    </select>
-  </div>
-  <div id="recipeDisplay">
-    <p>Test text</p>
-  </div>
-  <div>
-    <form id = "submitPortions" >
-      <label for="portions">Portions:</label>
-      <input type="text" id="portions" name="portions"><br><br>
-      <input type="submit" value="Submit">
-    </form>
-  </div>
-  <div id = 'measurements'/>
 </div>
+
 <hr/>
- 
 
 <div id="createrec">
   <h1>Add, Update, or Delete Recipes</h1>
@@ -65,6 +50,10 @@
     <div style="margin-top:10px;margin-bottom:10px;">
       <label for="recName">Recipe Name:</label>
       <input type="text" id="recName" name="recName" style="border:1px;border-radius:5px;" />
+    </div>
+    <div style="margin-top:10px;margin-bottom:10px;">
+      <label for="recCalc">Recipe Portion Calculations:</label>
+      <input type="text" id="recCalc" name="recCalc" value="1" style="border:1px;border-radius:5px;" />
     </div>
     <div style="margin-top:10px;margin-bottom:10px;">
       <label for="recDesc">Recipe Description:</label>
@@ -80,8 +69,14 @@
       <button class = "button" type="button" style="margin-top: 20px;" onclick="addIngredient()">Add Ingredient</button>
       <button class = "button" type="button" style="margin-top: 10px;" onclick="submitRec()">Save Recipe</button>
       <button class = "button" type="button" style="margin-top: 10px;" onclick="deleteRec()">Delete Recipe</button>
+      <button class = "button" type="button" style="margin-top: 10px;" onclick="calcRec()">Calculate Recipe Portions</button>
+    </div>
+    <div id="recResult" style="border: 1px solid blue;">
     </div>
   </div>
+
+  <hr/>
+
 
   <script>
     let rec = null;
@@ -105,16 +100,46 @@
       console.log(e.target.elements.portions.value);
       const portions = e.target.elements.portions.value ?? 1;
       e.preventDefault();
+      var recInput =  extractRecipeUserInput();
+      
 
       if (rec != null) {
+        // for (const portions)
         measurements.innerHTML = "Work in Progress, add measurements from backend for " + portions + rec.name;
+        console.log(portions)
         
+
       }
     }
 
+    function calcRec() {
+      rec = extractRecipeUserInput();
+      const calculate_options = { 
+      ...options, 
+      method: 'POST',
+      body: JSON.stringify(rec) 
+      }; // clones and replaces method
 
+      fetch(url + 'portions', calculate_options).then((response) => {
+        // response contains valid result
+        response.json().then((data) => {
+          console.log("Portion Calculation Result:", data);
+          var textbox = document.getElementById("recResult");
+          
+          text = '<b>Integredients</b>:';
+          text = text + '<ul>';
+          for (let ing of data.ingredients) {
+            const itext = `<li>${ing.amount} ${ing.type} of ${ing.unit}</li>`;
+            text += itext;
+          }
+          text += '</ul>';
 
-
+          
+          
+          textbox.innerHTML = text;
+        });
+      });
+    }
 
     function filterByString(data, s) {
       return data.filter((e) => e.name.includes(s))[0];
@@ -146,16 +171,33 @@
     }
 
     function submitRec() {
+      var recInput =  extractRecipeUserInput();
+      saveRec(jpFood);
+
+    }
+    function extractRecipeUserInput() {
       var table = document.getElementById("createRecipe");
       var count = table.rows.length - 1;
       var name = document.getElementById("recName");
       var descr = document.getElementById("recDesc");
       var directions = document.getElementById("recDir");
-      console.log(count);
+      var portions = document.getElementById("recCalc");
+      if (portions.value === '') {
+        intPortions = 1;
+      }
+      else {
+        intPortions = parseInt(portions.value);
+        if (Number.isInteger(intPortions) === false) {
+          alert(portions.value + " is not a number, please input a number.");
+          return;
+        }
+      }
+
       var jpFood = {
         name: name.value,
         description: descr.value,
         directions: directions.value,
+        portions : intPortions,
         ingredients: [],
       };
 
@@ -179,11 +221,11 @@
           amount: inputAmnt,
           unit: inputMeas?.value,
         };
-        console.log(jpFood);
         jpFood.ingredients.push(ingred);
       } // end for ingred
-      saveRec(jpFood);
+      return jpFood;
     }
+
     function deleteRec() {
       rec = { name : selectedRecName };
       const delete_options = { 
@@ -281,7 +323,7 @@
       if (ingredients) {
         rowIdx = 1;
         for (let ing of ingredients) {
-          initIngredient(ing.amount, ing.type, ing.unit, rowIdx++);
+          initIngredient(ing.amount, ing.unit, ing.type, rowIdx++);
         }
         totalIngredientRowIdx = rowIdx;
       }
