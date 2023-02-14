@@ -80,8 +80,8 @@
 
   <script>
     let rec = null;
-    // const url = "http://172.18.185.251:8086/api/jpFood";
-    const url = "http://localhost:8086/api/jpFood/"; // (NOT WORKING; needs a fix)
+    // const url = "http://172.18.185.251:8091/api/jpFood";
+    const url = "http://localhost:8091/api/jpFood/"; // (NOT WORKING; needs a fix)
     selectedRecName = "";
 
     // prepare fetch GET options
