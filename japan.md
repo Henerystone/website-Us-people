@@ -61,7 +61,7 @@
     </div>
     <div style="margin-top:10px;margin-bottom:10px;">
       <label for="recDir">Recipe Directions:</label>
-      <input type="text" id="recDir" name="recDir" style="width:500px;height:100px; border:1px;border-radius:5px;" />
+      <input type="textarea" id="recDir" name="recDir" style="width:500px;height:100px; border:1px;border-radius:5px;" />
     </div>
     <div id="createRecipeDiv" style="margin-top:10px;margin-bottom:10px;">
     </div>
@@ -125,8 +125,8 @@
         response.json().then((data) => {
           console.log("Portion Calculation Result:", data);
           var textbox = document.getElementById("recResult");
-          
-          text = '<b>Integredients</b>:';
+          text = text + `<b>${rec.name}</b>`;
+          text = '<b>Inegredients:</b>:';
           text = text + '<ul>';
           for (let ing of data.ingredients) {
             const itext = `<li>${ing.amount} ${ing.type} of ${ing.unit}</li>`;
@@ -134,11 +134,21 @@
           }
           text += '</ul>';
 
-          
+          text += createDirections(data.directions);
           
           textbox.innerHTML = text;
         });
       });
+    }
+    
+    function createDirections(dirs) {
+      dirbox = '';
+      i = 1;
+      for (let dir of dirs) {
+        const itext = `Step ${i} - ${dir.step}\r\n`;
+        dirbox += itext;
+      }
+      return dirbox;
     }
 
     function filterByString(data, s) {
@@ -282,7 +292,8 @@
       var nameField = document.getElementById("recName");
       nameField.setAttribute('value', rec.name);
       var dirField = document.getElementById("recDir");
-      dirField.value = rec.directions;
+      // TODO: Keira
+      dirField.value =  createDirections(rec.directions);
       if (rec.description) {
         var descrField = document.getElementById("recDesc");
         descrField.setAttribute('value', rec.description); 
