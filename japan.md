@@ -135,7 +135,7 @@
           console.log("Portion Calculation Result:", data);
           var textbox = document.getElementById("recResult");
           text = `<b>${rec.name}</b>`;
-          text = '<b>Inegredients:</b>:';
+          text = '<b>Ingredients:</b>';
           text = text + '<ul>';
           for (let ing of data.ingredients) {
             const itext = `<li>${ing.amount} ${ing.type} of ${ing.unit}</li>`;
@@ -227,10 +227,11 @@
         var tdName = row[2];
 
         var inputNum = tdNum.getElementsByTagName("input")[0];
-        inputAmnt = parseInt(inputNum.value);
+        inputAmnt = parseFloat(inputNum.value);
 
-        if (Number.isInteger(inputAmnt) === false) {
-          alert(inputNu2m.value + " is not a number, please input a number.");
+        function floatCheck() {
+        isFloat(inputAmnt) === false
+          alert(inputNum.value + " is not a number, please input a number.");
           return;
         }
         var inputMeas = tdMeas.getElementsByTagName("input")[0];
@@ -271,7 +272,7 @@
         response.json().then((data) => {
           console.log("all food ", data);
              
-        getAllRecipes(rec.name);
+        getAllRecipes();
         });
       });
     }
