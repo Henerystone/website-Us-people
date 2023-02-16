@@ -34,14 +34,19 @@
       alert("abort")
     }
   }
-  function recipe1() {
-    let re = "You are about to leave this site, are you sure?"
-    if(confirm(re)==true){
-      location.href = "https://hebbarskitchen.com/masala-dosa-recipe-crispy-masale-dose/"
-    } else {
-      alert("Ok, not sure why you clicked on it then")
-    }
+  function getRestaurants() {
+    const options = {
+	  method: 'GET',
+	  headers: {
+		  'X-RapidAPI-Key': 'dee5dcce83msh780914d639facb7p1f43c5jsn4c4a7717bb03',
+		  'X-RapidAPI-Host': 'restaurants-near-me-usa.p.rapidapi.com'
+	  }
+  fetch('https://restaurants-near-me-usa.p.rapidapi.com/restaurants/location/0', options)
+	.then(response => response.json())
+	.then(response => console.log(response))
+	.catch(err => console.error(err));
   }
+};
 </script>
 <p>
   Zip Code:
@@ -54,41 +59,41 @@
     <th class = "indian">Masala Dosa</th>
     <th class = "indian"><img src="/images/dosa.jpg" alt="dosa"></th>
     <th class = "indian">A sort of Indian pancake, filled with spices and potatoes, a perfect mix of bland and spicy, makes for a good breakfast and is consumed regularly in South India.</th>
-    <button type = "button" onclick = "recipe1()">Masala Dosa Recipe</button>
+  
   </tr>
   <tr>
     <th class = "indian">5</th>
     <th class = "indian">Pav Bhaji</th>
     <th class = "indian"><img src="/images/pav.jpg" alt="pav bhaji"></th>
     <th class = "indian">A kind of bread, eaten with a mix of vegetables and masala</th>
-    <button type = "button" onclick = "enter()">Recipe</button>
+
   </tr>
   <tr>
     <th class = "indian">4</th>
     <th class = "indian">Aloo Paratha</th>
     <th class = "indian"><img src="/images/paratha.jpg" alt="aloo paratha"></th>
     <th class = "indian">A kind of flatbread stuffed with mashed potatoes</th>
-    <button type = "button" onclick = "enter()">Recipe</button>
+
   </tr>
   <tr>
     <th class = "indian">3</th>
     <th class = "indian">Paneer and Naan</th>
     <th class = "indian"><img src="/images/paneer.jpg" alt="panner and naan"></th>
     <th class = "indian">A kind of Indian flatbread eaten with Indian cottage cheese mixed with spinach</th>
-    <button type = "button" onclick = "enter()">Recipe</button>
+
   </tr>
   <tr>
     <th class = "indian">2</th>
     <th class = "indian">Puran Poli</th>
     <th class = "indian"><img src="/images/puran.jpg" alt="puran poli"></th>
     <th class = "indian">Indian Flatbrad filled with sugar and jaggery</th>
-    <button type = "button" onclick = "enter()">Recipe</button>
+ 
   </tr>
   <tr>
     <th class = "indian">1</th>
     <th class = "indian">Pani Puri</th>
     <th class = "indian"><img src="/images/pani.jpg" alt="pani puri"></th>
     <th class = "indian">Round,small and edible bowls filled with chutney and sweet water</th>
-    <button type = "button" onclick = "enter()">Recipe</button>
+
   </tr>
 </table>
