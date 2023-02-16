@@ -7,6 +7,9 @@
     th {
       border: 2px solid white;
     }
+    .tabx {
+      tab-size: 8;
+    }
     .recipeNameSelect {
         width: 320px;
         height: 30px;
@@ -59,12 +62,18 @@
       <label for="recDesc">Recipe Description:</label>
       <input type="text" id="recDesc" name="recDesc"  style="border:1px;border-radius:5px;"/>
     </div>
-    <div style="margin-top:10px;margin-bottom:10px;">
-      <label for="recDir">Recipe Directions:</label>
-      <input type="textarea" id="recDir" name="recDir" style="width:500px;height:100px; border:1px;border-radius:5px;" />
-    </div>
     <div id="createRecipeDiv" style="margin-top:10px;margin-bottom:10px;">
     </div>
+    <div >
+      <h1>Directions</h1>
+      <p id="recDir" 
+        style="margin-top:10px;margin-bottom:10px;padding:20px;border:1px solid white;border-radius:5px;" 
+        contentEditable="true"></p>
+      <!-- <label for="recDir">Recipe Directions:</label>
+      <input type="textarea" id="recDir" name="recDir" style="width:500px;height:100px; border:1px;border-radius:5px;" /> -->
+    </div>
+    
+    <div>
     <div style="margin-top:10px;margin-bottom:10px;">
       <button class = "button" type="button" style="margin-top: 20px;" onclick="addIngredient()">Add Ingredient</button>
       <button class = "button" type="button" style="margin-top: 10px;" onclick="submitRec()">Save Recipe</button>
@@ -125,7 +134,7 @@
         response.json().then((data) => {
           console.log("Portion Calculation Result:", data);
           var textbox = document.getElementById("recResult");
-          text = text + `<b>${rec.name}</b>`;
+          text = `<b>${rec.name}</b>`;
           text = '<b>Inegredients:</b>:';
           text = text + '<ul>';
           for (let ing of data.ingredients) {
@@ -145,7 +154,7 @@
       dirbox = '';
       i = 1;
       for (let dir of dirs) {
-        const itext = `Step ${i} - ${dir.step}\r\n`;
+        const itext = `Step ${i++}   -   ${dir.step}<br>`;
         dirbox += itext;
       }
       return dirbox;
@@ -182,7 +191,7 @@
 
     function submitRec() {
       var recInput =  extractRecipeUserInput();
-      saveRec(jpFood);
+      saveRec(recInput);
 
     }
     function extractRecipeUserInput() {
@@ -190,7 +199,7 @@
       var count = table.rows.length - 1;
       var name = document.getElementById("recName");
       var descr = document.getElementById("recDesc");
-      var directions = document.getElementById("recDir");
+      
       var portions = document.getElementById("recCalc");
       if (portions.value === '') {
         intPortions = 1;
@@ -202,11 +211,11 @@
           return;
         }
       }
-
+      
       var jpFood = {
         name: name.value,
         description: descr.value,
-        directions: directions.value,
+        directions: extractDirectionValue(),
         portions : intPortions,
         ingredients: [],
       };
@@ -236,6 +245,19 @@
       return jpFood;
     }
 
+    function extractDirectionValue(){
+      const p = /\b(Step)\s+\d+\s+-\s+\b/;
+      var text = document.getElementById("recDir").innerHTML;
+      const lines = text.split('<br>');
+      steps = [];
+      for(l of lines) {
+        s = l.replace('<div>', '').replace('</div>', '').replace(p, '');
+        if (s !== '') {
+          steps.push({id : 0, step: s});
+        }
+      }
+      return steps;
+    }
     function deleteRec() {
       rec = { name : selectedRecName };
       const delete_options = { 
@@ -292,8 +314,8 @@
       var nameField = document.getElementById("recName");
       nameField.setAttribute('value', rec.name);
       var dirField = document.getElementById("recDir");
-      // TODO: Keira
-      dirField.value =  createDirections(rec.directions);
+      
+      dirField.innerHTML =  createDirections(rec.directions);
       if (rec.description) {
         var descrField = document.getElementById("recDesc");
         descrField.setAttribute('value', rec.description); 
