@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Harsha's Parametric Recipe Finder</title>
+        <link rel="stylesheet" href="style.css" />
+        <link href="https://fonts.googleapis.com/css2?family=ABeeZee&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <h1>Harsha's Parametric Recipe Finder</h1>
+        <div id="loading">
+            <img id="loading-image" style="border: none;" src="loader.gif" alt="I am hungry..." />
+          </div>
+        <div style="margin: 10px;margin-left: 25%;" class="search-field">
+            <input type="text" name="user-input" placeholder="Search Recipes / Cuisine"></input>
+            <button id='submit-btn'>Let's Eat</button>
+        </div>
+        <div id="results-info"></div>
+        <div id='results-container'></div>
+        <script src="jquery-3.3.1.min.js"></script>
+        <script src="script.js"></script>
+        <script>
+            $(window).on('load', function () {
+              $('#loading').hide();
+            }) 
+          </script>
+    </body>
+</html>
