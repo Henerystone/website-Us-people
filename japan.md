@@ -7,6 +7,9 @@
     th {
       border: 2px solid white;
     }
+    .tabx {
+      tab-size: 8;
+    }
     .recipeNameSelect {
         width: 320px;
         height: 30px;
@@ -59,12 +62,18 @@
       <label for="recDesc">Recipe Description:</label>
       <input type="text" id="recDesc" name="recDesc"  style="border:1px;border-radius:5px;"/>
     </div>
-    <div style="margin-top:10px;margin-bottom:10px;">
-      <label for="recDir">Recipe Directions:</label>
-      <input type="textarea" id="recDir" name="recDir" style="width:500px;height:100px; border:1px;border-radius:5px;" />
-    </div>
     <div id="createRecipeDiv" style="margin-top:10px;margin-bottom:10px;">
     </div>
+    <div >
+      <h1>Directions</h1>
+      <p id="recDir" 
+        style="margin-top:10px;margin-bottom:10px;padding:20px;border:1px solid white;border-radius:5px;" 
+        contentEditable="true"></p>
+      <!-- <label for="recDir">Recipe Directions:</label>
+      <input type="textarea" id="recDir" name="recDir" style="width:500px;height:100px; border:1px;border-radius:5px;" /> -->
+    </div>
+    
+    <div>
     <div style="margin-top:10px;margin-bottom:10px;">
       <button class = "button" type="button" style="margin-top: 20px;" onclick="addIngredient()">Add Ingredient</button>
       <button class = "button" type="button" style="margin-top: 10px;" onclick="submitRec()">Save Recipe</button>
@@ -125,8 +134,8 @@
         response.json().then((data) => {
           console.log("Portion Calculation Result:", data);
           var textbox = document.getElementById("recResult");
-          text = text + `<b>${rec.name}</b>`;
-          text = '<b>Inegredients:</b>:';
+          text = `<b>${rec.name}</b>`;
+          text = '<b>Ingredients:</b>';
           text = text + '<ul>';
           for (let ing of data.ingredients) {
             const itext = `<li>${ing.amount} ${ing.type} of ${ing.unit}</li>`;
@@ -145,7 +154,7 @@
       dirbox = '';
       i = 1;
       for (let dir of dirs) {
-        const itext = `Step ${i} - ${dir.step}\r\n`;
+        const itext = `Step ${i++}   -   ${dir.step}<br>`;
         dirbox += itext;
       }
       return dirbox;
@@ -182,7 +191,7 @@
 
     function submitRec() {
       var recInput =  extractRecipeUserInput();
-      saveRec(jpFood);
+      saveRec(recInput);
 
     }
     function extractRecipeUserInput() {
@@ -190,7 +199,7 @@
       var count = table.rows.length - 1;
       var name = document.getElementById("recName");
       var descr = document.getElementById("recDesc");
-      var directions = document.getElementById("recDir");
+      
       var portions = document.getElementById("recCalc");
       if (portions.value === '') {
         intPortions = 1;
@@ -202,11 +211,11 @@
           return;
         }
       }
-
+      
       var jpFood = {
         name: name.value,
         description: descr.value,
-        directions: directions.value,
+        directions: extractDirectionValue(),
         portions : intPortions,
         ingredients: [],
       };
@@ -218,10 +227,11 @@
         var tdName = row[2];
 
         var inputNum = tdNum.getElementsByTagName("input")[0];
-        inputAmnt = parseInt(inputNum.value);
+        inputAmnt = parseFloat(inputNum.value);
 
-        if (Number.isInteger(inputAmnt) === false) {
-          alert(inputNu2m.value + " is not a number, please input a number.");
+        function floatCheck() {
+        isFloat(inputAmnt) === false
+          alert(inputNum.value + " is not a number, please input a number.");
           return;
         }
         var inputMeas = tdMeas.getElementsByTagName("input")[0];
@@ -236,6 +246,19 @@
       return jpFood;
     }
 
+    function extractDirectionValue(){
+      const p = /\b(Step)\s+\d+\s+-\s+\b/;
+      var text = document.getElementById("recDir").innerHTML;
+      const lines = text.split('<br>');
+      steps = [];
+      for(l of lines) {
+        s = l.replace('<div>', '').replace('</div>', '').replace(p, '');
+        if (s !== '') {
+          steps.push({id : 0, step: s});
+        }
+      }
+      return steps;
+    }
     function deleteRec() {
       rec = { name : selectedRecName };
       const delete_options = { 
@@ -249,27 +272,27 @@
         response.json().then((data) => {
           console.log("all food ", data);
              
-        getAllRecipes(rec.name);
+        getAllRecipes();
         });
       });
     }
 
-    function getAllRecipes(name=undefined) {
+    function getAllRecipes(name=undefined) { // gets recipes from API; adds to the recipe dropdown menu as well
       const recipesDropDown = document.getElementById("recipeNamesDropDown");
       document.querySelectorAll('#recipeNamesDropDown option').forEach(option => option.remove())
       
-      //Async fetch API call to the database to create a new user
+      //Async fetch API call to the database to create a new row
       fetch(url, options).then((response) => {
         let firstOptionKey = undefined;
         // response contains valid result
         response.json().then((data) => {
           console.log("all food ", data);
-          //add a table row for the new/created userId
+          //add a table row for the new/created food
           const tr = document.createElement("tr");
           for (let key in data) {
             let option = document.createElement("option");
             // Set first name on the dropdown so can fill in data form later
-            firstOptionKey = firstOptionKey ?? data[key].name;
+            firstOptionKey = firstOptionKey ?? data[key].name; // sets the first option at the top of the dropdown
             option.setAttribute("value", data[key].name);
             let optionText = document.createTextNode(data[key].name);
             option.appendChild(optionText);
@@ -280,29 +303,29 @@
           selectedRecName = firstOptionKey;
           rec = filterByString(data, firstOptionKey);
           onRecipeNameChange(rec);
-          recipesDropDown.addEventListener("change", (e) => {
+          recipesDropDown.addEventListener("change", (e) => { // changes dropdown based on what is clicked
             selectedRecName = e.target.value;
             rec = filterByString(data, e.target.value);
-            onRecipeNameChange(rec);
+            onRecipeNameChange(rec); // when recipe name is clicked, display data is changed
           });
         });
       });
     }
     function onRecipeNameChange(rec) {
-      var nameField = document.getElementById("recName");
+      var nameField = document.getElementById("recName"); // (recipe name)
       nameField.setAttribute('value', rec.name);
-      var dirField = document.getElementById("recDir");
-      // TODO: Keira
-      dirField.value =  createDirections(rec.directions);
+      var dirField = document.getElementById("recDir"); // (recipe directions)
+      
+      dirField.innerHTML =  createDirections(rec.directions);
       if (rec.description) {
         var descrField = document.getElementById("recDesc");
-        descrField.setAttribute('value', rec.description); 
+        descrField.setAttribute('value', rec.description);  // recipe description, puts recipe description
       }
-      totalIngredientRowIdx = 0;
+      totalIngredientRowIdx = 0; // sets ingredient row (in the table) to 0, so rows can be added)
       createIngredientTable(rec.ingredients);
       
     }
-    function removeIngredientRows() {
+    function removeIngredientRows() { // deletes ingredient rows by taking row total and subtracting; table outputs 1 less row
       const table = document.getElementById("createRecipe");
       if (table) {
         const rowLen = table.rows.length - 1;
@@ -312,7 +335,8 @@
         }
       }
     }
-    function createIngredientTable(ingredients) {
+
+    function createIngredientTable(ingredients) { // creates ingredient table 
       
       const recipeDiv = document.getElementById("createRecipeDiv");
       
@@ -320,7 +344,7 @@
       if (table) {
         table.remove();
       }
-      table = document.createElement('table');
+      table = document.createElement('table'); // creates the table to house the recipe data
       table.setAttribute('id', 'createRecipe');
 
       var thead = table.insertRow(-1);
@@ -330,17 +354,17 @@
         th.innerHTML = ingHead[h];
         thead.appendChild(th);
       }
-      recipeDiv.appendChild(table);
+      recipeDiv.appendChild(table); // appends ingredients to each row of the table
       if (ingredients) {
         rowIdx = 1;
         for (let ing of ingredients) {
-          initIngredient(ing.amount, ing.unit, ing.type, rowIdx++);
+          initIngredient(ing.amount, ing.unit, ing.type, rowIdx++); // displays as amount of ingredient (int), ing unit (cups, etc), and type (lemon, salt, etc)
         }
         totalIngredientRowIdx = rowIdx;
       }
       
     }
-    function saveRec(rec) {
+    function saveRec(rec) { // saves to database (sqlite)
       const post_options = { 
       ...options, 
       method: 'POST',
@@ -356,6 +380,6 @@
         });
       });
     }
-    getAllRecipes();
+    getAllRecipes(); // gets recipes from backend
   </script>
 </div>
