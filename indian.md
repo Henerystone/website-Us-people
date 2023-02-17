@@ -25,33 +25,42 @@
 <h2 class = "indian">Indian restaurant locator</h2>
 <h1></h1>
 <h3>Enter your Zip code to find restaurants near you!</h3>
-<script>
-  function enter() {
-    let ent = "Are you sure?"
-    if (confirm(ent)==true){
-      alert("it is a go")
-    }else{
-      alert("abort")
-    }
-  }
-  function getRestaurants() {
-    const options = {
-	  method: 'GET',
-	  headers: {
-		  'X-RapidAPI-Key': 'dee5dcce83msh780914d639facb7p1f43c5jsn4c4a7717bb03',
-		  'X-RapidAPI-Host': 'restaurants-near-me-usa.p.rapidapi.com'
-	  }
-  fetch('https://restaurants-near-me-usa.p.rapidapi.com/restaurants/location/0', options)
-	.then(response => response.json())
-	.then(response => console.log(response))
-	.catch(err => console.error(err));
-  }
-};
-</script>
 <p>
   Zip Code:
   <input type="text" name="name" id="name" required>
-  <button type = "button" onclick = "enter()">Enter!</button>
+  <button type = "button" onclick = "getRestaurants(x.value)">Enter!</button>
+</p>
+<script>
+  function getRestaurants(x) {
+    const url = "https://restaurants-near-me-usa.p.rapidapi.com/restaurants/location/zipcode/90210/0";
+    const headers = {
+      "X-RapidAPI-Key": "dee5dcce83msh780914d639facb7p1f43c5jsn4c4a7717bb03",
+      "X-RapidAPI-Host": "restaurants-near-me-usa.p.rapidapi.com"
+    };
+    fetch(url, { headers })
+      .then(response => response.json())
+      .then(data => {
+        const zip = data.restaurants;
+        const x = parseInt(prompt("Zip Code:"));
+        console.log("Restaurants Near You:");
+        for (const [key, value] of Object.entries(zip[0])) {
+          console.log(key, value);
+        }
+        console.log("Restaurants");
+        for (const zipCode of zip) {
+          if (zipCode.zipCode === x) {
+            for (const [key, value] of Object.entries(zipCode)) {
+              document.getElementById("replace").innerHTML = "Restaurants"
+              document.getElementById("replace").innerHTML = (key, value)
+            }
+          }
+        }
+    })
+    .catch(error => console.error(error));
+  }
+</script> 
+<p>
+  <h3 id="replace"></h3>
 </p>
 <table>
   <tr>
