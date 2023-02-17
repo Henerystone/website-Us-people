@@ -277,22 +277,22 @@
       });
     }
 
-    function getAllRecipes(name=undefined) {
+    function getAllRecipes(name=undefined) { // gets recipes from API; adds to the recipe dropdown menu as well
       const recipesDropDown = document.getElementById("recipeNamesDropDown");
       document.querySelectorAll('#recipeNamesDropDown option').forEach(option => option.remove())
       
-      //Async fetch API call to the database to create a new user
+      //Async fetch API call to the database to create a new row
       fetch(url, options).then((response) => {
         let firstOptionKey = undefined;
         // response contains valid result
         response.json().then((data) => {
           console.log("all food ", data);
-          //add a table row for the new/created userId
+          //add a table row for the new/created food
           const tr = document.createElement("tr");
           for (let key in data) {
             let option = document.createElement("option");
             // Set first name on the dropdown so can fill in data form later
-            firstOptionKey = firstOptionKey ?? data[key].name;
+            firstOptionKey = firstOptionKey ?? data[key].name; // sets the first option at the top of the dropdown
             option.setAttribute("value", data[key].name);
             let optionText = document.createTextNode(data[key].name);
             option.appendChild(optionText);
@@ -303,29 +303,29 @@
           selectedRecName = firstOptionKey;
           rec = filterByString(data, firstOptionKey);
           onRecipeNameChange(rec);
-          recipesDropDown.addEventListener("change", (e) => {
+          recipesDropDown.addEventListener("change", (e) => { // changes dropdown based on what is clicked
             selectedRecName = e.target.value;
             rec = filterByString(data, e.target.value);
-            onRecipeNameChange(rec);
+            onRecipeNameChange(rec); // when recipe name is clicked, display data is changed
           });
         });
       });
     }
     function onRecipeNameChange(rec) {
-      var nameField = document.getElementById("recName");
+      var nameField = document.getElementById("recName"); // (recipe name)
       nameField.setAttribute('value', rec.name);
-      var dirField = document.getElementById("recDir");
+      var dirField = document.getElementById("recDir"); // (recipe directions)
       
       dirField.innerHTML =  createDirections(rec.directions);
       if (rec.description) {
         var descrField = document.getElementById("recDesc");
-        descrField.setAttribute('value', rec.description); 
+        descrField.setAttribute('value', rec.description);  // recipe description, puts recipe description
       }
-      totalIngredientRowIdx = 0;
+      totalIngredientRowIdx = 0; // sets ingredient row (in the table) to 0, so rows can be added)
       createIngredientTable(rec.ingredients);
       
     }
-    function removeIngredientRows() {
+    function removeIngredientRows() { // deletes ingredient rows by taking row total and subtracting; table outputs 1 less row
       const table = document.getElementById("createRecipe");
       if (table) {
         const rowLen = table.rows.length - 1;
@@ -335,7 +335,8 @@
         }
       }
     }
-    function createIngredientTable(ingredients) {
+
+    function createIngredientTable(ingredients) { // creates ingredient table 
       
       const recipeDiv = document.getElementById("createRecipeDiv");
       
@@ -343,7 +344,7 @@
       if (table) {
         table.remove();
       }
-      table = document.createElement('table');
+      table = document.createElement('table'); // creates the table to house the recipe data
       table.setAttribute('id', 'createRecipe');
 
       var thead = table.insertRow(-1);
@@ -353,17 +354,17 @@
         th.innerHTML = ingHead[h];
         thead.appendChild(th);
       }
-      recipeDiv.appendChild(table);
+      recipeDiv.appendChild(table); // appends ingredients to each row of the table
       if (ingredients) {
         rowIdx = 1;
         for (let ing of ingredients) {
-          initIngredient(ing.amount, ing.unit, ing.type, rowIdx++);
+          initIngredient(ing.amount, ing.unit, ing.type, rowIdx++); // displays as amount of ingredient (int), ing unit (cups, etc), and type (lemon, salt, etc)
         }
         totalIngredientRowIdx = rowIdx;
       }
       
     }
-    function saveRec(rec) {
+    function saveRec(rec) { // saves to database (sqlite)
       const post_options = { 
       ...options, 
       method: 'POST',
@@ -379,6 +380,6 @@
         });
       });
     }
-    getAllRecipes();
+    getAllRecipes(); // gets recipes from backend
   </script>
 </div>
