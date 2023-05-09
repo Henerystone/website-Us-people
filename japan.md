@@ -72,7 +72,6 @@
       <!-- <label for="recDir">Recipe Directions:</label>
       <input type="textarea" id="recDir" name="recDir" style="width:500px;height:100px; border:1px;border-radius:5px;" /> -->
     </div>
-    
     <div>
     <div style="margin-top:10px;margin-bottom:10px;">
       <button class = "button" type="button" style="margin-top: 20px;" onclick="addIngredient()">Add Ingredient</button>
@@ -168,9 +167,9 @@
       initIngredient(0, '', '',  totalIngredientRowIdx++);     
     }
 
-    function initIngredient(amount = 0, unit = "", type = "", rowIdx) {
+    function initIngredient(amount = 0, type = "", unit = "", rowIdx) {
       var table = document.getElementById("createRecipe");
-      var row = table.insertRow(rowIdx);
+      var row = table.insertRow();
       var cell1 = row.insertCell(0);
       var cell2 = row.insertCell(1);
       var cell3 = row.insertCell(2);
